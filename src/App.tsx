@@ -18,7 +18,7 @@ import { RequireAuth } from './components/auth/RequireAuth'
 function App() {
   return (
     <MantineProvider>
-      <Notifications position="top-right" zIndex={1000} />
+      <Notifications position="bottom-right" zIndex={1000} />
       <BrowserRouter>
         <Routes>
           <Route path="/signin" element={<SignIn />} />
