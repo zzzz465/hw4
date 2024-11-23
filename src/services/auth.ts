@@ -50,7 +50,7 @@ export const auth = {
   },
 
   getApiKey: () => {
-    const user = localStorage.getItem('user')
+    const user = localStorage.getItem('currentUser')
     if (!user) return null
     return JSON.parse(user).apiKey
   }
