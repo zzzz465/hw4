@@ -1,5 +1,7 @@
 import { MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css'
+import { Notifications } from '@mantine/notifications'
+import '@mantine/notifications/styles.css'
 import React from 'react'
 import logo from './logo.svg'
 import './App.css'
@@ -16,6 +18,7 @@ import { RequireAuth } from './components/auth/RequireAuth'
 function App() {
   return (
     <MantineProvider>
+      <Notifications position="top-right" zIndex={1000} />
       <BrowserRouter>
         <Routes>
           <Route path="/signin" element={<SignIn />} />
