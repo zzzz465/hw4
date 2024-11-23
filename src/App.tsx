@@ -7,12 +7,25 @@ import Search from './pages/search/Search'
 import Wishlist from './pages/wishlist/Wishlist'
 import MovieDetail from './pages/movie/MovieDetail'
 import SignIn from './pages/auth/SignIn'
-import { MantineProvider } from '@mantine/core'
+import { MantineProvider, createTheme } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
+import '@mantine/core/styles.css'
+
+const theme = createTheme({
+  primaryColor: 'red',
+  primaryShade: 7,
+  components: {
+    Menu: {
+      defaultProps: {
+        shadow: 'lg',
+      },
+    },
+  },
+})
 
 export default function App() {
   return (
-    <MantineProvider>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
       <Notifications position='bottom-right' zIndex={1000} />
       <BrowserRouter>
         <Routes>
