@@ -8,6 +8,7 @@ export interface Movie {
   backdrop_path: string
   overview: string
   poster_path: string
+  release_date: string
 }
 
 const trendingAtom = atomWithQuery(() => ({

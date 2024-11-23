@@ -1,5 +1,12 @@
 import { auth } from './auth'
 
+type SearchParams = {
+  query: string;
+  page?: number;
+  genres?: number[];
+  year?: number | null;
+}
+
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3'
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
 
@@ -61,6 +68,22 @@ export const tmdb = {
   getPopular: async (page: number = 1) => {
     const response = await fetch(
       `${TMDB_BASE_URL}/movie/popular?api_key=${auth.getApiKey()}&page=${page}`
+    )
+    return response.json()
+  },
+
+  searchMovies: async ({ query, page = 1, genres = [], year = null }: SearchParams) => {
+    const params = new URLSearchParams({
+      api_key: auth.getApiKey(),
+      query,
+      page: String(page),
+      include_adult: 'false',
+      ...(year && { year: String(year) }),
+      ...(genres.length > 0 && { with_genres: genres.join(',') }),
+    })
+
+    const response = await fetch(
+      `${TMDB_BASE_URL}/search/movie?${params}`
     )
     return response.json()
   },
