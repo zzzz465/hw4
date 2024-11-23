@@ -95,7 +95,7 @@ export default function Home() {
 
       <Stack py="xl" mt="-4rem" pos="relative" style={{ zIndex: 1 }}>
         {sections.map((section) => (
-          <MovieSlider key={section.title} title={section.title} movies={section.movies} />
+            <MovieSlider title={section.title} movies={section.movies} />
         ))}
       </Stack>
     </Box>

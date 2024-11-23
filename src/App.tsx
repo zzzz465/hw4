@@ -10,6 +10,7 @@ import SignIn from './pages/auth/SignIn'
 import { MantineProvider, createTheme } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import '@mantine/core/styles.css'
+import '@mantine/carousel/styles.css'
 
 const theme = createTheme({
   primaryColor: 'red',
