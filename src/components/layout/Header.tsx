@@ -13,7 +13,19 @@ export function Header() {
   }
 
   return (
-    <Box component="header" pos="fixed" w="100%" bg="rgba(0, 0, 0, 0.75)" style={{ zIndex: 50 }}>
+    <Box
+      component="header"
+      pos="fixed"
+      top={0}
+      left={0}
+      right={0}
+      h="var(--header-height, 60px)"
+      bg="rgba(0, 0, 0, 0.75)"
+      style={{
+        zIndex: 100,
+        backdropFilter: 'blur(8px)',
+      }}
+    >
       <Container size="xl">
         <Group justify="space-between" p="md">
           <Group gap="md">

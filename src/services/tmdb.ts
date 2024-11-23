@@ -57,4 +57,11 @@ export const tmdb = {
     )
     return response.json()
   },
+
+  getPopular: async (page: number = 1) => {
+    const response = await fetch(
+      `${TMDB_BASE_URL}/movie/popular?api_key=${auth.getApiKey()}&page=${page}`
+    )
+    return response.json()
+  },
 }
