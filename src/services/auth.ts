@@ -47,5 +47,11 @@ export const auth = {
 
   isLoggedIn: (): boolean => {
     return !!localStorage.getItem('currentUser');
+  },
+
+  getApiKey: () => {
+    const user = localStorage.getItem('user')
+    if (!user) return null
+    return JSON.parse(user).apiKey
   }
 };

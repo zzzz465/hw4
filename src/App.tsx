@@ -3,8 +3,6 @@ import '@mantine/core/styles.css'
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
 import React from 'react'
-import logo from './logo.svg'
-import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import Home from './pages/home/Home'
@@ -23,15 +21,15 @@ function App() {
         <Routes>
           <Route path="/signin" element={<SignIn />} />
 
-          <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
-          <Route path="/popular" element={<RequireAuth><Popular /></RequireAuth>} />
-          <Route path="/search" element={<RequireAuth><Search /></RequireAuth>} />
-          <Route path="/wishlist" element={<RequireAuth><Wishlist /></RequireAuth>} />
-          <Route path="/movies/:id" element={<RequireAuth><MovieDetail /></RequireAuth>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/popular" element={<Popular />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/movies/:id" element={<MovieDetail />} />
         </Routes>
       </BrowserRouter>
     </MantineProvider>
   )
 }
 
-export default App
+
