@@ -38,8 +38,12 @@ export function Header() {
         {isAuthenticated ? (
           <Menu position="bottom-end" shadow="md">
             <Menu.Target>
-              <ActionIcon variant="subtle" color="gray" size="lg">
-                <IconUser size={20} />
+              <ActionIcon
+                variant="transparent"
+                className="text-gray-300 hover:text-white transition-colors"
+                size="lg"
+              >
+                <IconUser size={24} stroke={1.5} />
               </ActionIcon>
             </Menu.Target>
 
