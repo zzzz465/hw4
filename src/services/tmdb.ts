@@ -42,5 +42,19 @@ export const tmdb = {
 
   getUpcoming: async () => {
     return tmdbFetch('/movie/upcoming')
-  }
+  },
+
+  getMovie: async (movieId: string) => {
+    const response = await fetch(
+      `${TMDB_BASE_URL}/movie/${movieId}?api_key=${auth.getApiKey()}`
+    )
+    return response.json()
+  },
+
+  getSimilarMovies: async (movieId: string) => {
+    const response = await fetch(
+      `${TMDB_BASE_URL}/movie/${movieId}/similar?api_key=${auth.getApiKey()}`
+    )
+    return response.json()
+  },
 }
