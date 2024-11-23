@@ -2,8 +2,9 @@
 
 - this project is netflix website clone coding project.
 - use typescript, react, tailwindcss, use mantine ui for components.
-- we don't have any backend server, only frontend, mock components like login feature if required.
 - keep project simple as possible, and focus on implementing the features.
 - don't care about clean code or best practices, the main goal is to finish the project as quickly as possible.
 - do not add comments as much as possible.
 - use existing components to reduce the time and effort of coding.
+- we use TMDB API for data, for login feature, use the TMDB API key.
+- always consider mobile screen size (responsive design).
