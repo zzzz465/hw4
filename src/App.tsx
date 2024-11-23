@@ -35,7 +35,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme} defaultColorScheme="dark">
         <Notifications position='bottom-right' zIndex={1000} />
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
           <Routes>
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/signin" element={<SignIn />} />
