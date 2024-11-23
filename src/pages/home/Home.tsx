@@ -1,17 +1,8 @@
-import { useEffect, useState } from 'react'
-import { Button, Text, Skeleton, List, Box, Title, Stack, Container } from '@mantine/core'
+import { Button, Text, Skeleton, Box, Title, Stack } from '@mantine/core'
 import { IconPlayerPlay } from '@tabler/icons-react'
-import { tmdb } from '../../services/tmdb'
 import { Link } from 'react-router-dom'
 import { MovieSlider } from '../../components/movie/MovieSlider'
-
-interface Movie {
-  id: number
-  title: string
-  backdrop_path: string
-  overview: string
-  poster_path: string
-}
+import { useMovieQueries, Movie } from '../../hooks/queries/movieQueries'
 
 interface MovieSection {
   title: string
@@ -19,40 +10,25 @@ interface MovieSection {
 }
 
 export default function Home() {
-  const [featured, setFeatured] = useState<Movie | null>(null)
-  const [sections, setSections] = useState<MovieSection[]>([])
-  const [loading, setLoading] = useState(true)
+  const { isLoading, isError, data } = useMovieQueries()
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const [trendingData, topRatedData, nowPlayingData, upcomingData] = await Promise.all([
-          tmdb.getTrending(),
-          tmdb.getTopRated(),
-          tmdb.getNowPlaying(),
-          tmdb.getUpcoming()
-        ])
-
-        setSections([
-          { title: 'Trending Now', movies: trendingData.results },
-          { title: 'Now Playing', movies: nowPlayingData.results },
-          { title: 'Top Rated', movies: topRatedData.results },
-          { title: 'Upcoming', movies: upcomingData.results }
-        ])
-        setFeatured(trendingData.results[0])
-        setLoading(false)
-      } catch (error) {
-        console.error('Error fetching movies:', error)
-        setLoading(false)
-      }
-    }
-
-    fetchMovies()
-  }, [])
-
-  if (loading) {
+  if (isLoading) {
     return <Skeleton height="100vh" />
   }
+
+  if (isError) {
+    return <Box p="xl">Error loading movies</Box>
+  }
+
+  const [trending, topRated, nowPlaying, upcoming] = data
+  const featured = trending?.results[0]
+
+  const sections: MovieSection[] = [
+    { title: 'Trending Now', movies: trending?.results || [] },
+    { title: 'Now Playing', movies: nowPlaying?.results || [] },
+    { title: 'Top Rated', movies: topRated?.results || [] },
+    { title: 'Upcoming', movies: upcoming?.results || [] },
+  ]
 
   return (
     <Box bg="dark.9" miw="100vw" mih="100vh">
@@ -95,7 +71,7 @@ export default function Home() {
 
       <Stack py="xl" mt="-4rem" pos="relative" style={{ zIndex: 1 }}>
         {sections.map((section) => (
-            <MovieSlider title={section.title} movies={section.movies} />
+          <MovieSlider key={section.title} title={section.title} movies={section.movies} />
         ))}
       </Stack>
     </Box>
