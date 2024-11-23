@@ -1,13 +1,9 @@
 import { Carousel } from '@mantine/carousel'
-import { Title } from '@mantine/core'
+import { Title, Card, Image, Box } from '@mantine/core'
 import { Link } from 'react-router-dom'
 import { useMediaQuery } from '@mantine/hooks'
-
-interface Movie {
-  id: number
-  title: string
-  poster_path: string
-}
+import { WishlistButton } from './WishlistButton'
+import { Movie } from '../../types/movie'
 
 interface MovieSliderProps {
   title: string
@@ -63,16 +59,17 @@ export function MovieSlider({ title, movies }: MovieSliderProps) {
       >
         {movies.map((movie) => (
           <Carousel.Slide key={movie.id}>
-            <Link
-              to={`/movies/${movie.id}`}
-              className="block h-full transition-transform hover:scale-105"
-            >
-              <img
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                alt={movie.title}
-                className="rounded-md w-full h-full object-cover"
-                loading="lazy"
-              />
+            <Link to={`/movies/${movie.id}`}>
+              <Card p={0} radius="md" className="relative group h-full">
+                <Image
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  className="rounded-md w-full h-full object-cover"
+                />
+              </Card>
+              <Box className="absolute bottom-2 right-2 z-10">
+                <WishlistButton movie={movie} />
+              </Box>
             </Link>
           </Carousel.Slide>
         ))}

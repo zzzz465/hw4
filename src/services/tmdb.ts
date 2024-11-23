@@ -1,4 +1,5 @@
 import { auth } from './auth'
+import axios from 'axios'
 
 type SearchParams = {
   query: string;
@@ -87,4 +88,53 @@ export const tmdb = {
     )
     return response.json()
   },
+
+  addToWishlist: async (movieId: number, sessionId: string) => {
+    const response = await axios.post(
+      `${TMDB_BASE_URL}/account/{account_id}/favorite`,
+      {
+        media_type: 'movie',
+        media_id: movieId,
+        favorite: true
+      },
+      {
+        params: {
+          api_key: auth.getApiKey(),
+          session_id: sessionId
+        }
+      }
+    )
+    return response.data
+  },
+
+  removeFromWishlist: async (movieId: number, sessionId: string) => {
+    const response = await axios.post(
+      `${TMDB_BASE_URL}/account/{account_id}/favorite`,
+      {
+        media_type: 'movie',
+        media_id: movieId,
+        favorite: false
+      },
+      {
+        params: {
+          api_key: auth.getApiKey(),
+          session_id: sessionId
+        }
+      }
+    )
+    return response.data
+  },
+
+  getWishlist: async (sessionId: string) => {
+    const response = await axios.get(
+      `${TMDB_BASE_URL}/account/{account_id}/favorite/movies`,
+      {
+        params: {
+          api_key: auth.getApiKey(),
+          session_id: sessionId
+        }
+      }
+    )
+    return response.data.results
+  }
 }
