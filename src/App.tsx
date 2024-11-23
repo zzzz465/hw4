@@ -1,35 +1,29 @@
-import { MantineProvider } from '@mantine/core'
-import '@mantine/core/styles.css'
-import { Notifications } from '@mantine/notifications'
-import '@mantine/notifications/styles.css'
-import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Layout } from './components/layout/Layout'
-import Home from './pages/home/Home'
-import Popular from './pages/popular/Popular'
-import Search from './pages/search/Search'
-import Wishlist from './pages/wishlist/Wishlist'
-import SignIn from './pages/auth/SignIn'
-import MovieDetail from './pages/movie/MovieDetail'
-import { RequireAuth } from './components/auth/RequireAuth'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { Layout } from './components/layout/Layout';
+import { RequireAuth } from './components/auth/RequireAuth';
+import Home from './pages/home/Home';
+import Popular from './pages/popular/Popular';
+import Search from './pages/search/Search';
+import Wishlist from './pages/wishlist/Wishlist';
+import MovieDetail from './pages/movie/MovieDetail';
+import SignIn from './pages/auth/SignIn';
 
-function App() {
+export default function App() {
   return (
-    <MantineProvider>
-      <Notifications position="bottom-right" zIndex={1000} />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/signin" element={<SignIn />} />
+    <Routes>
+      <Route path="/signin" element={<SignIn />} />
 
-          <Route path="/" element={<Home />} />
-          <Route path="/popular" element={<Popular />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/movies/:id" element={<MovieDetail />} />
-        </Routes>
-      </BrowserRouter>
-    </MantineProvider>
-  )
+      <Route element={<RequireAuth><Layout /></RequireAuth>}>
+        <Route index element={<Home />} />
+        <Route path="popular" element={<Popular />} />
+        <Route path="search" element={<Search />} />
+        <Route path="wishlist" element={<Wishlist />} />
+        <Route path="movies/:id" element={<MovieDetail />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 }
 
 
