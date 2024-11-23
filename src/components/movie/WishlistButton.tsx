@@ -21,7 +21,10 @@ export function WishlistButton({ movie, styles }: WishlistButtonProps) {
     setIsWishlisted(wishlist.some((m: Movie) => m.id === movie.id))
   }, [movie.id, email])
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
     if (!email) return
 
     if (isWishlisted) {
