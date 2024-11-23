@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Text, Skeleton } from '@mantine/core'
+import { Button, Text, Skeleton, List, Box, Title, Stack, Container } from '@mantine/core'
 import { IconPlayerPlay } from '@tabler/icons-react'
 import { tmdb } from '../../services/tmdb'
 import { Link } from 'react-router-dom'
@@ -13,12 +13,14 @@ interface Movie {
   poster_path: string
 }
 
+interface MovieSection {
+  title: string
+  movies: Movie[]
+}
+
 export default function Home() {
   const [featured, setFeatured] = useState<Movie | null>(null)
-  const [trending, setTrending] = useState<Movie[]>([])
-  const [topRated, setTopRated] = useState<Movie[]>([])
-  const [nowPlaying, setNowPlaying] = useState<Movie[]>([])
-  const [upcoming, setUpcoming] = useState<Movie[]>([])
+  const [sections, setSections] = useState<MovieSection[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -31,10 +33,12 @@ export default function Home() {
           tmdb.getUpcoming()
         ])
 
-        setTrending(trendingData.results)
-        setTopRated(topRatedData.results)
-        setNowPlaying(nowPlayingData.results)
-        setUpcoming(upcomingData.results)
+        setSections([
+          { title: 'Trending Now', movies: trendingData.results },
+          { title: 'Now Playing', movies: nowPlayingData.results },
+          { title: 'Top Rated', movies: topRatedData.results },
+          { title: 'Upcoming', movies: upcomingData.results }
+        ])
         setFeatured(trendingData.results[0])
         setLoading(false)
       } catch (error) {
@@ -47,24 +51,33 @@ export default function Home() {
   }, [])
 
   if (loading) {
-    return <Skeleton height={400} />
+    return <Skeleton height="100vh" />
   }
 
   return (
-    <div className="min-h-screen bg-neutral-900">
+    <Box bg="dark.9" miw="100vw" mih="100vh">
       {featured && (
-        <div
-          className="relative h-[80vh] bg-cover bg-center"
+        <Box
+          pos="relative"
+          h="80vh"
           style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/original${featured.backdrop_path})`
+            backgroundImage: `url(https://image.tmdb.org/t/p/original${featured.backdrop_path})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 to-transparent" />
-          <div className="absolute bottom-0 left-0 p-8 w-full md:w-1/2">
-            <h1 className="text-4xl md:text-6xl text-white mb-4 font-bold">
+          <Box
+            pos="absolute"
+            inset={0}
+            style={{
+              background: 'linear-gradient(to top, var(--mantine-color-dark-9), transparent)',
+            }}
+          />
+          <Box pos="absolute" bottom={0} left={0} p="xl" w={{ base: '100%', md: '50%' }}>
+            <Title order={1} c="white" size="h1" fw="bold" mb="md">
               {featured.title}
-            </h1>
-            <Text className="text-white mb-6 line-clamp-3">
+            </Title>
+            <Text c="white" mb="xl" lineClamp={3}>
               {featured.overview}
             </Text>
             <Button
@@ -76,16 +89,15 @@ export default function Home() {
             >
               Play Now
             </Button>
-          </div>
-        </div>
+          </Box>
+        </Box>
       )}
 
-      <div className="py-8 space-y-8 -mt-16 relative z-10">
-        <MovieSlider title="Trending Now" movies={trending} />
-        <MovieSlider title="Now Playing" movies={nowPlaying} />
-        <MovieSlider title="Top Rated" movies={topRated} />
-        <MovieSlider title="Upcoming" movies={upcoming} />
-      </div>
-    </div>
+      <Stack py="xl" mt="-4rem" pos="relative" style={{ zIndex: 1 }}>
+        {sections.map((section) => (
+          <MovieSlider key={section.title} title={section.title} movies={section.movies} />
+        ))}
+      </Stack>
+    </Box>
   )
 }
