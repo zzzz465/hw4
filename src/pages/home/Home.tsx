@@ -1,4 +1,4 @@
-import { Button, Text, Skeleton, Box, Title, Stack } from '@mantine/core'
+import { Button, Text, Skeleton, Box, Title, Stack, Alert } from '@mantine/core'
 import { IconPlayerPlay } from '@tabler/icons-react'
 import { Link } from 'react-router-dom'
 import { MovieSlider } from '../../components/movie/MovieSlider'
@@ -24,14 +24,14 @@ export default function Home() {
   }, [trending])
 
   useEffect(() => {
-    if (!isLoading && !featured) {
+    if (isError) {
       notifications.show({
         title: 'Error',
         message: 'failed to load TMDB, please check your API key is correct.',
         color: 'red',
       })
     }
-  }, [featured, isLoading])
+  }, [isError, isLoading, data])
 
   const sections: MovieSection[] = [
     { title: 'Trending Now', movies: trending?.results || [] },
@@ -39,14 +39,6 @@ export default function Home() {
     { title: 'Top Rated', movies: topRated?.results || [] },
     { title: 'Upcoming', movies: upcoming?.results || [] },
   ]
-
-  if (isLoading) {
-    return <Skeleton height="100vh" />
-  }
-
-  if (isError) {
-    return <Box p="xl">Error loading movies</Box>
-  }
 
   return (
     <Box bg="dark.9" miw="100vw" mih="100vh">

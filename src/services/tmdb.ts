@@ -23,6 +23,11 @@ export const tmdbFetch = async (endpoint: string, options = {}) => {
       'Content-Type': 'application/json',
     },
   })
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch data from TMDB')
+  }
+
   return response.json()
 }
 

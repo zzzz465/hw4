@@ -1,5 +1,4 @@
-import { atom, useAtomValue } from 'jotai'
-import { atomWithQuery } from 'jotai-tanstack-query'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import { tmdb } from '../../services/tmdb'
 
 export interface Movie {
@@ -11,66 +10,68 @@ export interface Movie {
   release_date: string
 }
 
-const trendingAtom = atomWithQuery(() => ({
-  queryKey: ['movies', 'trending'],
-  queryFn: () => tmdb.getTrending(),
-}))
-
-const topRatedAtom = atomWithQuery(() => ({
-    queryKey: ['movies', 'topRated'],
-  queryFn: () => tmdb.getTopRated(),
-}))
-
-const nowPlayingAtom = atomWithQuery(() => ({
-  queryKey: ['movies', 'nowPlaying'],
-    queryFn: () => tmdb.getNowPlaying(),
-}))
-
-const upcomingAtom = atomWithQuery(() => ({
-  queryKey: ['movies', 'upcoming'],
-  queryFn: () => tmdb.getUpcoming(),
-}))
-
-const loadingAtom = atom((get) => {
-  const trending = get(trendingAtom)
-  const topRated = get(topRatedAtom)
-  const nowPlaying = get(nowPlayingAtom)
-  const upcoming = get(upcomingAtom)
-
-  return trending.isLoading || topRated.isLoading || nowPlaying.isLoading || upcoming.isLoading
-})
-
-const errorAtom = atom((get) => {
-  const trending = get(trendingAtom)
-  const topRated = get(topRatedAtom)
-  const nowPlaying = get(nowPlayingAtom)
-  const upcoming = get(upcomingAtom)
-
-  return trending.isError || topRated.isError || nowPlaying.isError || upcoming.isError
-})
-
-const moviesAtom = atom((get) => {
-  const trending = get(trendingAtom)
-  const topRated = get(topRatedAtom)
-  const nowPlaying = get(nowPlayingAtom)
-  const upcoming = get(upcomingAtom)
-
-  return [
-    trending.data,
-    topRated.data,
-    nowPlaying.data,
-    upcoming.data,
-  ]
-})
-
 export function useMovieQueries() {
-  const isLoading = useAtomValue(loadingAtom)
-  const isError = useAtomValue(errorAtom)
-  const data = useAtomValue(moviesAtom)
+  const queries = useQueries({
+    queries: [
+      {
+        queryKey: ['movies', 'trending'],
+        queryFn: () => tmdb.getTrending(),
+        retry: false
+      },
+      {
+        queryKey: ['movies', 'topRated'],
+        queryFn: () => tmdb.getTopRated(),
+        retry: false,
+      },
+      {
+        queryKey: ['movies', 'nowPlaying'],
+        queryFn: () => tmdb.getNowPlaying(),
+        retry: false,
+      },
+      {
+        queryKey: ['movies', 'upcoming'],
+        queryFn: () => tmdb.getUpcoming(),
+        retry: false,
+      },
+    ],
+  })
+
+  const isLoading = queries.some(query => query.isLoading)
+  const isError = queries.some(query => query.isError)
+  const data = queries.map(query => query.data)
 
   return {
     isLoading,
     isError,
     data,
   }
+}
+
+// Individual query hooks if needed
+export function useTrendingMovies() {
+  return useQuery({
+    queryKey: ['movies', 'trending'],
+    queryFn: () => tmdb.getTrending(),
+  })
+}
+
+export function useTopRatedMovies() {
+  return useQuery({
+    queryKey: ['movies', 'topRated'],
+    queryFn: () => tmdb.getTopRated(),
+  })
+}
+
+export function useNowPlayingMovies() {
+  return useQuery({
+    queryKey: ['movies', 'nowPlaying'],
+    queryFn: () => tmdb.getNowPlaying(),
+  })
+}
+
+export function useUpcomingMovies() {
+  return useQuery({
+    queryKey: ['movies', 'upcoming'],
+    queryFn: () => tmdb.getUpcoming(),
+  })
 }
