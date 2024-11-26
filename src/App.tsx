@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom'
+import { Routes, Route, Navigate, HashRouter } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import { RequireAuth } from './components/auth/RequireAuth'
 import Home from './pages/home/Home'
@@ -35,7 +35,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme} defaultColorScheme="dark">
         <Notifications position='bottom-right' zIndex={1000} />
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <HashRouter>
           <Routes>
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/signin" element={<SignIn />} />
@@ -48,7 +48,7 @@ export default function App() {
               <Route path="movies/:id" element={<MovieDetail />} />
             </Route>
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </MantineProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
