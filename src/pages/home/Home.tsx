@@ -1,4 +1,4 @@
-import { Button, Text, Skeleton, Box, Title, Stack, Alert } from '@mantine/core'
+import { Button, Text, Box, Title, Stack } from '@mantine/core'
 import { IconPlayerPlay } from '@tabler/icons-react'
 import { Link } from 'react-router-dom'
 import { MovieSlider } from '../../components/movie/MovieSlider'
