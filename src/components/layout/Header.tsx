@@ -6,6 +6,7 @@ import { auth } from '../../services/auth'
 export function Header() {
   const navigate = useNavigate()
   const isAuthenticated = auth.isLoggedIn()
+  const currentUser = auth.getCurrentUser()
 
   const handleLogout = () => {
     auth.logout()
@@ -102,6 +103,7 @@ export function Header() {
 
               <Menu.Dropdown>
                 <Menu.Label>Account</Menu.Label>
+                <Menu.Item disabled>{currentUser?.email}</Menu.Item>
                 <Menu.Item onClick={handleLogout} color="red">
                   Sign Out
                 </Menu.Item>
