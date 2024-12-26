@@ -1,4 +1,4 @@
-import { kakaoAuth } from './kakaoAuth'
+import { tmdbConfig } from './tmdbConfig'
 import axios from 'axios'
 
 type SearchParams = {
@@ -12,7 +12,7 @@ const TMDB_BASE_URL = 'https://api.themoviedb.org/3'
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
 
 export const tmdbFetch = async (endpoint: string, options = {}) => {
-  const apiKey = kakaoAuth.getApiKey()
+  const apiKey = tmdbConfig.getApiKey()
   if (!apiKey) {
     throw new Error('No API key found')
   }
@@ -59,28 +59,28 @@ export const tmdb = {
 
   getMovie: async (movieId: string) => {
     const response = await fetch(
-      `${TMDB_BASE_URL}/movie/${movieId}?api_key=${kakaoAuth.getApiKey()}`
+      `${TMDB_BASE_URL}/movie/${movieId}?api_key=${tmdbConfig.getApiKey()}`
     )
     return response.json()
   },
 
   getSimilarMovies: async (movieId: string) => {
     const response = await fetch(
-      `${TMDB_BASE_URL}/movie/${movieId}/similar?api_key=${kakaoAuth.getApiKey()}`
+      `${TMDB_BASE_URL}/movie/${movieId}/similar?api_key=${tmdbConfig.getApiKey()}`
     )
     return response.json()
   },
 
   getPopular: async (page: number = 1) => {
     const response = await fetch(
-      `${TMDB_BASE_URL}/movie/popular?api_key=${kakaoAuth.getApiKey()}&page=${page}`
+      `${TMDB_BASE_URL}/movie/popular?api_key=${tmdbConfig.getApiKey()}&page=${page}`
     )
     return response.json()
   },
 
   searchMovies: async ({ query, page = 1, genres = [], year = null }: SearchParams) => {
     const params = new URLSearchParams({
-      api_key: kakaoAuth.getApiKey(),
+      api_key: tmdbConfig.getApiKey(),
       query,
       page: String(page),
       include_adult: 'false',
@@ -104,7 +104,7 @@ export const tmdb = {
       },
       {
         params: {
-          api_key: kakaoAuth.getApiKey(),
+          api_key: tmdbConfig.getApiKey(),
           session_id: sessionId
         }
       }
@@ -122,7 +122,7 @@ export const tmdb = {
       },
       {
         params: {
-          api_key: kakaoAuth.getApiKey(),
+          api_key: tmdbConfig.getApiKey(),
           session_id: sessionId
         }
       }
@@ -135,7 +135,7 @@ export const tmdb = {
       `${TMDB_BASE_URL}/account/{account_id}/favorite/movies`,
       {
         params: {
-          api_key: kakaoAuth.getApiKey(),
+          api_key: tmdbConfig.getApiKey(),
           session_id: sessionId
         }
       }

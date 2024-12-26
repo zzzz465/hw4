@@ -76,17 +76,14 @@ export const kakaoAuth = {
     if (!access_token) return;
 
     try {
-      await axios.post(
-        `${KAKAO_API_URL}/v1/user/logout`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
+      const CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
+      const REDIRECT_URI = kakaoAuth.getRedirectUri();
+
+      await axios.get(`https://kauth.kakao.com/v1/user/logout?client_id=${CLIENT_ID}&logout_redirect_uri=${REDIRECT_URI}`);
     } finally {
       localStorage.removeItem('kakao_access_token');
+      localStorage.removeItem('currentUser');
+      window.location.reload();
     }
   },
 
@@ -97,9 +94,5 @@ export const kakaoAuth = {
   getCurrentUser: (): KakaoUserInfo | null => {
     const userStr = localStorage.getItem('currentUser');
     return userStr ? JSON.parse(userStr) : null;
-  },
-
-  getApiKey: () => {
-    return process.env.REACT_APP_TMDB_API_KEY || '';
   }
 };
