@@ -1,23 +1,22 @@
+import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { auth } from '../../services/auth';
+import { kakaoAuth } from '../../services/kakaoAuth';
 
 export function RequireAuth({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
 
   useEffect(() => {
-    if (!auth.isLoggedIn()) {
-      navigate('/signin', {
-        replace: true,
-        state: { from: location }
-      });
+    if (!kakaoAuth.isLoggedIn()) {
+      console.log('not logged in')
+      navigate('/signin')
+    } else {
+      console.log('user: ', kakaoAuth.getCurrentUser())
     }
-  }, [navigate, location]);
+  }, [navigate])
 
-  if (!auth.isLoggedIn()) {
-    return null;
-  }
+  useEffect(() => {
+    console.log(kakaoAuth.isLoggedIn())
+  }, [])
 
-  return <>{children}</>;
+  return <>{children}</>
 }

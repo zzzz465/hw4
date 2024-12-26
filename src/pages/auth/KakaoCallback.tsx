@@ -9,17 +9,20 @@ export default function KakaoCallback() {
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code');
     if (!code) {
-      navigate('/signin');
+      console.log('No code found');
+      navigate('/signin', { replace: true });
       return;
     }
 
     kakaoAuth.handleCallback(code)
-      .then(() => {
-        navigate('/');
+      .then((userinfo) => {
+        console.log('Kakao login successful. userinfo: ', userinfo);
+        localStorage.setItem('currentUser', JSON.stringify(userinfo));
+        navigate('/', { replace: true });
       })
       .catch((error) => {
         console.error('Kakao login failed:', error);
-        navigate('/signin');
+        navigate('/signin', { replace: true });
       });
   }, [navigate]);
 

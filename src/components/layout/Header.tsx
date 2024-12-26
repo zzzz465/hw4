@@ -1,18 +1,19 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { Button, Menu, ActionIcon, Group, Box, Text, Container, Burger } from '@mantine/core'
 import { IconUser, IconHome, IconSearch, IconHeart, IconTrendingUp } from '@tabler/icons-react'
-import { auth } from '../../services/auth'
+import { kakaoAuth } from '../../services/kakaoAuth'
 import { useState } from 'react'
 
 export function Header() {
   const navigate = useNavigate()
-  const isAuthenticated = auth.isLoggedIn()
-  const currentUser = auth.getCurrentUser()
+  const isAuthenticated = kakaoAuth.isLoggedIn()
+  const currentUser = kakaoAuth.getCurrentUser()
   const [mobileMenuOpened, setMobileMenuOpened] = useState(false)
 
-  const handleLogout = () => {
-    auth.logout()
-    navigate('/signin')
+  const handleLogout = async () => {
+    await kakaoAuth.logout()
+    window.location.reload()
+    navigate('/')
   }
 
   const navigationLinks = [
@@ -116,7 +117,7 @@ export function Header() {
 
                 <Menu.Dropdown>
                   <Menu.Label>Account</Menu.Label>
-                  <Menu.Item disabled>{currentUser?.email}</Menu.Item>
+                  <Menu.Item disabled>{currentUser?.kakao_account?.profile?.nickname}</Menu.Item>
                   <Menu.Item onClick={handleLogout} color="red">
                     Sign Out
                   </Menu.Item>

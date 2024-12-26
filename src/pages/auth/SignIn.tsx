@@ -8,12 +8,14 @@ export default function SignIn() {
 
   useEffect(() => {
     if (kakaoAuth.isLoggedIn()) {
-      navigate('/');
+      console.log('logged in, redirecting to home')
+      navigate('/', { replace: true });
     }
   }, [navigate]);
 
   const handleKakaoLogin = () => {
-    kakaoAuth.login();
+    const authUrl = kakaoAuth.login();
+    window.location.href = authUrl;
   };
 
   return (

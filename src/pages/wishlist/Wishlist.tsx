@@ -5,17 +5,17 @@ import { WishlistButton } from '../../components/movie/WishlistButton'
 import { wishlistStorage } from '../../services/localStorage'
 import { useIntersection } from '@mantine/hooks'
 import { Movie } from '../../types/movie'
-import { auth } from '../../services/auth'
+import { kakaoAuth } from '../../services/kakaoAuth'
 
 export default function Wishlist() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid')
   const [page, setPage] = useState(1)
   const ITEMS_PER_PAGE = 12
 
-  const user = auth.getCurrentUser()
-  const email = user?.email
+  const user = kakaoAuth.getCurrentUser()
+  const nickname = user?.kakao_account.profile.nickname
 
-  const movies = email ? wishlistStorage.getWishlist(email) : []
+  const movies = nickname ? wishlistStorage.getWishlist(nickname) : []
   const paginatedMovies = movies.slice(0, page * ITEMS_PER_PAGE)
 
   const { ref, entry } = useIntersection({
@@ -26,7 +26,7 @@ export default function Wishlist() {
     setPage(page + 1)
   }
 
-  if (!email) {
+  if (!nickname) {
     return (
       <Container size="xl" className="py-8">
         <Title order={1} className="text-white mb-8">Please log in to see your wishlist</Title>

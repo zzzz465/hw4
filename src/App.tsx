@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, HashRouter } from 'react-router-dom'
+import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import { RequireAuth } from './components/auth/RequireAuth'
 import Home from './pages/home/Home'
@@ -7,11 +7,11 @@ import Search from './pages/search/Search'
 import Wishlist from './pages/wishlist/Wishlist'
 import MovieDetail from './pages/movie/MovieDetail'
 import SignIn from './pages/auth/SignIn'
+import KakaoCallback from './pages/auth/KakaoCallback'
 import { MantineProvider, createTheme } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import KakaoCallback from './pages/auth/KakaoCallback'
 
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css'
@@ -35,10 +35,9 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme} defaultColorScheme="dark">
-        <Notifications position='bottom-right' zIndex={1000} />
-        <HashRouter>
+        <BrowserRouter>
+          <Notifications position='bottom-right' zIndex={1000} />
           <Routes>
-            <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/oauth/callback/kakao" element={<KakaoCallback />} />
 
@@ -50,9 +49,9 @@ export default function App() {
               <Route path="movies/:id" element={<MovieDetail />} />
             </Route>
           </Routes>
-        </HashRouter>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </BrowserRouter>
       </MantineProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
 }

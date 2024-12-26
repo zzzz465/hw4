@@ -20,25 +20,28 @@ interface KakaoUserInfo {
     profile_image?: string;
   };
   kakao_account: {
-    email?: string;
-    profile?: {
+    profile: {
       nickname: string;
-      profile_image_url?: string;
     };
   };
 }
 
 export const kakaoAuth = {
-  login: async () => {
-    const CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
-    const REDIRECT_URI = `${window.location.origin}/oauth/callback/kakao`;
+  getRedirectUri: () => {
+    return `${window.location.origin}/oauth/callback/kakao`;
+  },
 
-    window.location.href = `${KAKAO_AUTH_URL}/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  login: () => {
+    const CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
+    const REDIRECT_URI = kakaoAuth.getRedirectUri();
+
+    const authUrl = `${KAKAO_AUTH_URL}/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    return authUrl;
   },
 
   handleCallback: async (code: string) => {
     const CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
-    const REDIRECT_URI = `${window.location.origin}/oauth/callback/kakao`;
+    const REDIRECT_URI = kakaoAuth.getRedirectUri();
 
     const tokenResponse = await axios.post<KakaoTokenResponse>(
       `${KAKAO_AUTH_URL}/token`,
@@ -90,4 +93,13 @@ export const kakaoAuth = {
   isLoggedIn: () => {
     return !!localStorage.getItem('kakao_access_token');
   },
+
+  getCurrentUser: (): KakaoUserInfo | null => {
+    const userStr = localStorage.getItem('currentUser');
+    return userStr ? JSON.parse(userStr) : null;
+  },
+
+  getApiKey: () => {
+    return process.env.REACT_APP_TMDB_API_KEY || '';
+  }
 };

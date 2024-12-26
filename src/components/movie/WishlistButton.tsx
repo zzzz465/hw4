@@ -3,7 +3,7 @@ import { IconHeart } from '@tabler/icons-react'
 import { wishlistStorage } from '../../services/localStorage'
 import { useEffect, useState } from 'react'
 import { Movie } from '../../types/movie'
-import { auth } from '../../services/auth'
+import { kakaoAuth } from '../../services/kakaoAuth'
 
 interface WishlistButtonProps {
   movie: Movie
@@ -11,26 +11,26 @@ interface WishlistButtonProps {
 }
 
 export function WishlistButton({ movie, styles }: WishlistButtonProps) {
-  const user = auth.getCurrentUser()
-  const email = user?.email
+  const user = kakaoAuth.getCurrentUser()
+  const nickname = user?.kakao_account.profile.nickname
   const [isWishlisted, setIsWishlisted] = useState(false)
 
   useEffect(() => {
-    if (!email) return
-    const wishlist = wishlistStorage.getWishlist(email)
+    if (!nickname) return
+    const wishlist = wishlistStorage.getWishlist(nickname)
     setIsWishlisted(wishlist.some((m: Movie) => m.id === movie.id))
-  }, [movie.id, email])
+  }, [movie.id, nickname])
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
-    if (!email) return
+
+    if (!nickname) return
 
     if (isWishlisted) {
-      wishlistStorage.removeFromWishlist(email, movie.id)
+      wishlistStorage.removeFromWishlist(nickname, movie.id)
     } else {
-      wishlistStorage.addToWishlist(email, movie)
+      wishlistStorage.addToWishlist(nickname, movie)
     }
     setIsWishlisted(!isWishlisted)
   }
@@ -40,7 +40,7 @@ export function WishlistButton({ movie, styles }: WishlistButtonProps) {
       <ActionIcon
         variant="transparent"
         onClick={handleClick}
-        disabled={!email}
+        disabled={!nickname}
         size="sm"
         radius="xl"
         styles={{
