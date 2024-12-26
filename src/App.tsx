@@ -11,6 +11,7 @@ import { MantineProvider, createTheme } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import KakaoCallback from './pages/auth/KakaoCallback'
 
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css'
@@ -39,6 +40,7 @@ export default function App() {
           <Routes>
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route path="/oauth/callback/kakao" element={<KakaoCallback />} />
 
             <Route element={<RequireAuth><Layout /></RequireAuth>}>
               <Route index element={<Home />} />
